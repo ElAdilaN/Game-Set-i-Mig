@@ -11,7 +11,7 @@ export default class Game {
     this.numberOfPlayers = 0;
   }
   getInfo() {
-    let input = prompt("please enter player's number ");
+    let input = parseInt(prompt("please enter player's number "));
     this.numberOfPlayers = parseInt(input, 10);
     const playerObj = new Player();
     this.playersArray = playerObj.createPlayer(
@@ -75,11 +75,28 @@ export default class Game {
       const playerCard = document.createElement("div");
       playerCard.className = `playerCard`;
       playerCard.id = `player-Cards-${i + 1}`;
-      playerCard.textContent = "cards: \n";
+      playerCard.innerHTML = "Cards" + "<br>";
 
       playerContainer.appendChild(playerCard);
 
       playersContainer.appendChild(playerContainer);
+
+      btnDemand.addEventListener("click", () => {
+        let newCard = this.deck.cards.pop();
+        this.playersArray[i].cards.push(newCard);
+        this.playersArray[i].totalPoints += newCard.pointValue;
+
+        this.updatePlayerCards(i, newCard, this.playersArray[i].totalPoints);
+        if (this.playersArray[i].totalPoints > 7.5) {
+          this.playersArray[i].state = "no-active";
+
+          alert(
+            this.playersArray[i].name + " is eliminated, has depassed 7.5 "
+          );
+          this.torn = (this.torn + 1) % this.playersArray.length;
+          this.jugada(this.torn, this.deck);
+        }
+      });
     }
   }
 
@@ -91,9 +108,9 @@ export default class Game {
     this.moneyToWin = this.numberOfPlayers * this.moneyToPlayWith;
   }
   checkButtons(torn) {
-    for (let i = 1; i < this.numberOfPlayers; i++) {
-      const mybtn1 = document.getElementById(`btn1-${i}`);
-      const mybtn2 = document.getElementById(`btn2-${i}`);
+    for (let i = 0; i < this.numberOfPlayers; i++) {
+      const mybtn1 = document.getElementById(`btn1-${i + 1}`);
+      const mybtn2 = document.getElementById(`btn2-${i + 1}`);
       mybtn1.disabled = true;
       mybtn2.disabled = true;
       mybtn1.style.backgroundColor = "white";
@@ -127,20 +144,7 @@ export default class Game {
         const mybtn1 = document.getElementById(`btn1-${torn + 1}`);
         const mybtn2 = document.getElementById(`btn2-${torn + 1}`);
 
-        mybtn1.addEventListener("click", function () {
-          let newCard = currentDeck.cards.pop();
-          currentPlayer.cards.push(newCard);
-          currentPlayer.totalPoints += newCard.pointValue;
-
-          this.updatePlayerCards(torn, newCard, currentPlayer.totalPoints);
-          if (currentPlayer.totalPoints > 7.5) {
-            this.playersArray[torn].state = "no-active";
-            alert(currentPlayer.name + " is eliminated , has depassed 7.5 ");
-            torn = (torn + 1) % this.playersArray.length;
-          }
-          this.jugada(torn, currentDeck);
-        });
-        mybtn2.addEventListener("click", function () {
+        mybtn2.addEventListener("click", () => {
           torn = (torn + 1) % this.playersArray.length;
           this.jugada(torn, currentDeck);
         });
@@ -149,16 +153,35 @@ export default class Game {
         this.jugada(torn, currentDeck);
       }
     } else {
+      document
+        .querySelectorAll(".button")
+        .forEach((button) => (button.disabled = true));
+
       let winner = this.playersArray.find(
         (player) => player.state === "active"
       );
 
       alert(
-        "Game over ! the winner is" +
+        "Game over ! the winner is " +
           winner.name +
           " now u have " +
           winner.money
       );
+      this.updateMoney(this.playersArray, this.moneyToWin);
+    }
+  }
+
+  updateMoney(arr, money) {
+    for (let i = 0; i < arr.length; i++) {
+      const mymoney = document.getElementById(`playerMoney-${i + 1}`);
+
+      if (arr[i].state === "active") {
+        arr[i].money += money - this.moneyToPlayWith;
+      } else {
+        arr[i].money -= money / arr.length;
+      }
+      mymoney.textContent = "Player Money : " + arr[i].money;
+      alert(arr[i].name + "  " + arr[i].money);
     }
   }
 
@@ -166,33 +189,13 @@ export default class Game {
     const mypoints = document.getElementById(`playerPoints-${torn + 1}`);
     const mycards = document.getElementById(`player-Cards-${torn + 1}`);
 
+    const cardImage = document.createElement("img");
+    cardImage.className = "img";
+    cardImage.src = `images/${card.value}${card.suit}.PNG`;
+    cardImage.alt = "Card Image";
+
+    mycards.appendChild(cardImage);
+
     mypoints.textContent = "Total points : " + totalpts;
-    mycards.textContent += "\n " + card.value + " of " + card.suit;
-  }
-
-  resetValues(myarray) {
-    myarray.forEach((player) => {
-      player.cards = [];
-    });
-    myarray.forEach((player) => {
-      player.totalPoints = 0;
-    });
-  }
-
-  restartGame() {
-    let playAgain = confirm(
-      "Do you want to play again with the same players and money?"
-    );
-
-    if (playAgain) {
-      resetValues(this.playersArray);
-      this.startGame();
-      this.play();
-    } else {
-      resetValues(this.playersArray);
-      this.getInfo();
-      this.startGame();
-      this.play();
-    }
   }
 }

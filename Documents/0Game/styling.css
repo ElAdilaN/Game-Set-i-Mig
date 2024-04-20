@@ -1,8 +1,21 @@
 /* Style for the main container */
+body {
+  background-color: green;
+  font-family: "Courier New", Courier, monospace;
+}
+
+.img {
+  width: 126px;
+  height: 190px;
+  border: 0px solid black;
+  border-radius: 20px;
+  margin: 2px;
+}
+
 #container {
   display: flex;
-  flex-direction: column;
-  height: 100vh;
+  flex-direction: row;
+  height: 97vh;
 }
 
 /* Style for player containers */
@@ -11,26 +24,61 @@
   display: flex;
   flex-direction: column;
   border: 2px solid black;
-  margin: 5px;
-  padding: 10px;
+  margin: 2px;
+  padding: 2px;
+
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+.playerInfo {
+  font-family: "Courier New", Courier, monospace;
+  border: 2px solid black;
+  border-radius: 20px;
+  padding: 5px;
+  background-color: aquamarine;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: blue;
+  text-align: center;
+}
+
+.playerName {
+  font-weight: bold;
+  font-size: 1.2rem;
+}
+
+.playerPoints,
+.playerMoney {
+  margin-top: 10px;
+  font-size: 1rem;
 }
 
 /* Style for buttons */
 .button {
-  margin: 5px;
+  font-family: "Courier New", Courier, monospace;
+  color: black;
+  margin: 5px 0px;
+  display: inline-block;
+  padding: 10px 20px;
+  background-color: #4caf50; /* Green background */
+  text-align: center;
+  font-size: 16px;
+  border: none;
+  border-radius: 5px; 
+
 }
 
 /* Style for player cards */
 .playerCard {
-  flex: 1;
-  border: 1px solid gray;
-  margin: 5px;
-  padding: 10px;
-}
-
-/* Style for number of points */
-.points {
+  color: aqua;
   text-align: center;
-  margin-bottom: 10px;
-  height: 50px;
+  flex: 1;
+  border: 5px solid black;
+  border-radius: 20px;
+  margin: 2px;
+  padding: 10px;
 }

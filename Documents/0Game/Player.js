@@ -18,9 +18,9 @@ export default class Player {
 
     for (let i = 1; i < numberOfPlayers; i++) {
       aPlayer = new Player();
-      aPlayer.name = prompt(`enter player ${i} name  please `);
+      aPlayer.name = prompt(`enter player ${i+1} name  please `);
       aPlayer.money =
-        prompt(`enter player ${i} money  please `) - moneyToPlayWith;
+        prompt(`enter player ${i+1} money  please `) - moneyToPlayWith;
       aPlayer.state = "active";
 
       playersArray.push(aPlayer);
