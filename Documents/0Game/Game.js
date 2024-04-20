@@ -181,7 +181,6 @@ export default class Game {
         arr[i].money -= money / arr.length;
       }
       mymoney.textContent = "Player Money : " + arr[i].money;
-      alert(arr[i].name + "  " + arr[i].money);
     }
   }
 
